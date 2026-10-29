@@ -1,0 +1,23 @@
+[
+  {
+    "id": 3,
+    "priority": 3,
+    "action": { "type": "allow" },
+    "condition": {
+      "regexFilter": "^https?:\\/\\/(www\\.)?anime-sama\\.(to|pw)\\/.*$",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": { "regexSubstitution": "https://anime-sama.to\\2" }
+    },
+    "condition": {
+      "regexFilter": "^https?:\\/\\/(www\\.)?anime-sama\\.[^\\/]+(\\/.*)$",
+      "resourceTypes": ["main_frame"]
+    }
+  }
+]

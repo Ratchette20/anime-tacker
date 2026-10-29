@@ -1,0 +1,105 @@
+{
+  "manifest_version": 3,
+  "name": "Anime Tracker",
+  "description": "Tracker d'animes multi-sites avec Firebase",
+  "version": "7.0",
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "activeTab",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess"
+  ],
+  "host_permissions": [
+    "https://anime-sama.to/*",
+    "https://anime-sama.pw/*",
+    "https://anime-sama.tv/*",
+    "https://anime-sama.si/*",
+    "https://anime-sama.org/*",
+    "https://anime-sama.fr/*",
+    "https://anime-sama.me/*",
+    "https://anime-sama.net/*",
+    "https://franime.fr/*",
+    "https://www.franime.fr/*",
+    "https://voir-anime.to/*",
+    "https://www.voir-anime.to/*",
+    "https://animationdigitalnetwork.com/*",
+    "https://www.animationdigitalnetwork.fr/*",
+    "https://www.crunchyroll.com/*",
+    "https://crunchyroll.com/*",
+    "https://graphql.anilist.co/*",
+    "https://track-my-anime.blogspot.com/*",
+    "https://identitytoolkit.googleapis.com/*",
+    "https://firestore.googleapis.com/*",
+    "https://securetoken.googleapis.com/*",
+    "https://www.omdbapi.com/*",
+    "https://api.jikan.moe/*"
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_redirect",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Anime Tracker",
+    "default_icon": {
+      "16": "images/icon-16.png",
+      "48": "images/icon-48.png",
+      "128": "images/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "images/icon-16.png",
+    "48": "images/icon-48.png",
+    "128": "images/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://anime-sama.to/*",
+        "https://anime-sama.pw/*",
+        "https://anime-sama.tv/*",
+        "https://anime-sama.fr/*",
+        "https://anime-sama.me/*",
+        "https://anime-sama.net/*",
+        "https://anime-sama.si/*",
+        "https://anime-sama.org/*",
+        "https://franime.fr/*",
+        "https://www.franime.fr/*",
+        "https://voir-anime.to/*",
+        "https://www.voir-anime.to/*",
+        "https://www.animationdigitalnetwork.fr/*",
+        "https://animationdigitalnetwork.com/*",
+        "https://www.crunchyroll.com/*",
+        "https://crunchyroll.com/*"
+      ],
+      "js": [
+        "utils/helpers.js",
+        "utils/image-finder.js",
+        "extracteurs/extracteur-anime-sama.js",
+        "extracteurs/extracteur-franime.js",
+        "extracteurs/extracteur-voiranime.js",
+        "extracteurs/extracteur-crunchyroll.js",
+        "extracteurs/extracteur-adn.js",
+        "modules/url-redirect.js",
+        "content_script.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["images/*.jpg", "images/*.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

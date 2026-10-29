@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Anime Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="pseudoScreen" class="screen auth-screen" style="display:none;">
+    <div class="auth-wrap">
+      <div class="auth-brand">
+        <div class="auth-brand-icon">▶</div>
+        <h1>Anime Tracker</h1><p>Suivi multi-sites</p>
+      </div>
+      <div class="auth-card">
+        <h2>Nouveau compte</h2>
+        <input id="pseudoInput" type="text" placeholder="Choisissez un pseudo..." class="auth-input" />
+        <button id="pseudoBtn" class="btn-primary">Continuer</button>
+        <div id="pseudoError" class="error-message"></div>
+      </div>
+      <div id="pseudoExistingWrap" style="display:none;">
+        <div class="auth-divider"><span>ou choisir un compte existant</span></div>
+        <div id="pseudoAccountsList" class="auth-accounts-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="loginScreen" class="screen auth-screen" style="display:none;">
+    <div class="auth-wrap">
+      <div class="auth-brand">
+        <div class="auth-brand-icon">▶</div>
+        <h1>Anime Tracker</h1><p>Suivi multi-sites</p>
+      </div>
+      <div id="loginForm" class="auth-card">
+        <h2>Connexion</h2>
+        <input id="loginEmail"    type="email"    placeholder="Email"        class="auth-input" />
+        <input id="loginPassword" type="password" placeholder="Mot de passe" class="auth-input" />
+        <button id="loginBtn" class="btn-primary">Se connecter</button>
+        <div id="loginError" class="error-message"></div>
+        <div class="auth-links-row">
+          <button id="forgotPasswordBtn" class="btn-text">Mot de passe oublié ?</button>
+          <button id="registerToggleBtn" class="btn-text">Créer un compte</button>
+        </div>
+      </div>
+      <div id="registerForm" class="auth-card" style="display:none;">
+        <h2>Créer un compte</h2>
+        <input id="registerEmail"       type="email"    placeholder="Email"              class="auth-input" />
+        <input id="registerPassword"    type="password" placeholder="Mot de passe"       class="auth-input" />
+        <input id="registerDisplayName" type="text"     placeholder="Pseudo (optionnel)" class="auth-input" />
+        <button id="registerBtn" class="btn-primary">S'inscrire</button>
+        <div id="registerError" class="error-message"></div>
+        <button id="loginToggleBtn" class="btn-text">Déjà un compte ? Se connecter</button>
+      </div>
+      <div id="forgotForm" class="auth-card" style="display:none;">
+        <h2>Réinitialiser</h2>
+        <p style="font-size:12px;color:#475569;margin:0 0 4px;">Un email de réinitialisation sera envoyé.</p>
+        <input id="forgotEmail" type="email" placeholder="Votre email" class="auth-input" />
+        <button id="forgotSendBtn" class="btn-primary">Envoyer</button>
+        <div id="forgotMsg" class="error-message" style="color:#10b981;"></div>
+        <button id="forgotBackBtn" class="btn-text">← Retour à la connexion</button>
+      </div>
+      <div id="loginExistingWrap" style="display:none;">
+        <div class="auth-divider"><span>ou reprendre une session</span></div>
+        <div id="loginAccountsList" class="auth-accounts-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="mainScreen" class="screen" style="display:none;">
+    <div class="container">
+      <header class="topbar">
+        <input id="search" placeholder="Recherche..." />
+        <div class="profile-circle" id="profileCircle" title="Profil">
+          <img id="profileImg" src="" alt="Profil" />
+        </div>
+        <div class="controls">
+          <select id="sort">
+            <option value="newest">Plus récent</option>
+            <option value="alpha">A → Z</option>
+            <option value="alpha-desc">Z → A</option>
+            <option value="oldest">Plus vieux</option>
+          </select>
+        </div>
+      </header>
+      <main id="list" class="list"></main>
+      <footer class="footer">
+        <button id="siteBtn" class="site-btn">🌐 Site</button>
+      </footer>
+    </div>
+  </div>
+
+  <div id="profileModal" class="modal-profile" style="display:none;">
+    <div class="profile-modal-content">
+      <div class="pm-header">
+        <button id="profileCloseBtn"    class="pm-close-btn">✕</button>
+        <button id="profileSettingsBtn" class="pm-settings-btn">⚙</button>
+        <div class="pm-avatar-ring">
+          <div class="pm-avatar-wrap"><img id="profileImgLarge" src="" alt="Avatar" /></div>
+          <div class="pm-avatar-status"></div>
+        </div>
+        <h2 id="profileName"  class="pm-username">Utilisateur</h2>
+        <p  id="profileEmail" class="pm-email"></p>
+        <div class="pm-stats-row">
+          <div class="pm-stat"><div class="pm-stat-val" id="statAnimes">0</div><div class="pm-stat-label">Animés</div></div>
+          <div class="pm-stat-sep"></div>
+          <div class="pm-stat"><div class="pm-stat-val" id="statEpisodes">0</div><div class="pm-stat-label">Épisodes</div></div>
+        </div>
+      </div>
+      <div class="pm-section">
+        <div class="pm-section-label">Comptes</div>
+        <div id="profileAccountsList"></div>
+        <div class="pm-add-row" id="profileAddAccountBtn">
+          <div class="pm-add-icon">+</div>
+          <span class="pm-add-label">Ajouter un compte</span>
+        </div>
+      </div>
+      <div class="pm-divider"></div>
+      <div id="settingsPanel" class="pm-settings-panel" style="display:none;">
+        <div class="pm-section-label" style="padding:16px 20px 8px;">Paramètres</div>
+        <div class="pm-setting-row">
+          <div class="pm-setting-info">
+            <div class="pm-setting-title">Redirection automatique</div>
+            <div class="pm-setting-desc">Redirige vers le domaine actif d'Anime-Sama</div>
+          </div>
+          <label class="pm-toggle">
+            <input type="checkbox" id="settingUrlRedirect" checked />
+            <span class="pm-toggle-track"></span>
+          </label>
+        </div>
+        <div class="pm-divider" style="margin:4px 0;"></div>
+      </div>
+      <div class="pm-actions">
+        <button id="profileDisconnectBtn" class="pm-logout-btn">Se déconnecter</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="reportModal" class="modal-profile" style="display:none;">
+    <div class="report-modal-content">
+      <button id="reportCloseBtn" class="pm-close-btn" style="position:absolute;top:12px;right:12px;">✕</button>
+      <div class="report-header">
+        <div class="report-icon">🚩</div>
+        <h2>Signaler un problème</h2>
+        <p id="reportAnimeTitle" class="report-anime-name"></p>
+      </div>
+      <div class="report-options">
+        <button id="reportBtnImage" class="report-option-btn">
+          <span class="report-option-icon">🖼</span>
+          <div>
+            <div class="report-option-title">Mauvaise image</div>
+            <div class="report-option-desc">L'image de couverture n'est pas la bonne</div>
+          </div>
+        </button>
+        <button id="reportBtnIssue" class="report-option-btn">
+          <span class="report-option-icon">⚠️</span>
+          <div>
+            <div class="report-option-title">Autre problème</div>
+            <div class="report-option-desc">Titre incorrect, épisode erroné...</div>
+          </div>
+        </button>
+        <div id="reportIssueForm" style="display:none;flex-direction:column;gap:8px;">
+          <textarea id="reportIssueDetails" placeholder="Décrivez le problème..." class="report-textarea"></textarea>
+          <button id="reportIssueSend" class="btn-primary">Envoyer</button>
+        </div>
+      </div>
+      <div id="reportMsg" class="error-message" style="color:#10b981;margin-top:8px;text-align:center;"></div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="utils/helpers.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
